@@ -1,136 +1,441 @@
-# Data_warehouse_SQL
-A modern data warehouse built with SQL Server, featuring ETL pipelines, data modeling, data integration, and analytics to transform raw data into actionable insights.
-# Data Source Assessment & Onboarding Checklist
+# 🏗️ Data Warehouse SQL
 
-A structured checklist used to evaluate and document a data source before onboarding it into the pipeline — covering business context, architecture, and extract/load requirements.
+A modern **SQL Server data warehouse** designed to demonstrate end-to-end data engineering practices, including **data source assessment, ETL pipelines, data integration, dimensional modeling, data quality, and analytics**.
 
-## 📋 Status Overview
-
-| Section | Items | Status |
-|---|---|---|
-| Business Context & Ownership | 4 | ✅ Completed |
-| Architecture & Technology Stack | 2 | ✅ Completed |
-| Extract & Load | 6 | ✅ Completed |
+The project follows a structured **Bronze → Silver → Gold** architecture to transform raw operational data into clean, analytics-ready datasets.
 
 ---
 
-## 1. Business Context & Ownership
+## 📌 Project Overview
 
-| Question | Details / Technical Options | Status |
-|---|---|---|
-| Who owns the data? | Data owner, domain lead, and business stewards | ✅ Completed |
-| What business process does it support? | Core operational, transactional, or analytics workflows | ✅ Completed |
-| System & data documentation | Data dictionaries, ER diagrams, architecture specs | ✅ Completed |
-| Data model & data catalog | Schema design, tables/views, data catalog registry | ✅ Completed |
+This project demonstrates how a data warehouse can be designed and implemented using SQL Server, with a focus on:
 
-## 2. Architecture & Technology Stack
-
-| Question | Details / Technical Options | Status |
-|---|---|---|
-| How is data stored? | SQL Server, Oracle, AWS, Azure, PostgreSQL, etc. | ✅ Completed |
-| What are the integration capabilities? | API, Kafka, file extract, direct DB connection, etc. | ✅ Completed |
-
-## 3. Extract & Load
-
-| Question | Details / Technical Options | Status |
-|---|---|---|
-| Incremental vs. full loads? | Initial snapshot vs. change data capture (CDC) / delta loads | ✅ Completed |
-| Data scope & historical needs | Historical depth, backfill requirements, active data range | ✅ Completed |
-| Expected size of extracts | Batch payload size, record counts, expected MB/GB/TB | ✅ Completed |
-| Data volume limitations | Bandwidth caps, query timeouts, source extraction limits | ✅ Completed |
-| Avoiding source system performance impact | Read replicas, off-peak execution windows, rate throttling | ✅ Completed |
-| Authentication and authorization | Tokens, SSH keys, VPN, IP whitelisting, IAM roles | ✅ Completed |
+* 🔄 ETL / ELT pipeline development
+* 🗄️ Data warehouse architecture
+* 🧩 Dimensional data modeling
+* 🔍 Data source assessment
+* 🧹 Data cleansing and transformation
+* ✅ Data quality validation
+* 📊 Analytics-ready datasets
+* 📈 Business intelligence integration
 
 ---
 
-*This checklist is intended to be run once per data source before development begins, ensuring ownership, architecture, and extraction constraints are understood ahead of pipeline design.*
+## 🏛️ Architecture
 
-<div align="center">
+The warehouse follows a layered architecture:
 
-# 📋 Data Source Assessment & Onboarding Checklist
-
-*A pre-ingestion due-diligence checklist for evaluating new data sources before they enter the warehouse.*
-
-![Show Image](https://via.placeholder.com/900x250?text=Banner+Image+Here)
-
-![Status](https://img.shields.io/badge/Status-Completed-brightgreen?style=for-the-badge)
-![Sections](https://img.shields.io/badge/Sections-3-blue?style=for-the-badge)
-![Items](https://img.shields.io/badge/Checklist_Items-12-informational?style=for-the-badge)
-
-</div>
-
----
-
-## 🗂️ Overview
-
-<div align="center">
-
-| 🧩 Section | 📌 Items | ✅ Status |
-|:---|:---:|:---:|
-| **Business Context & Ownership** | 4 | ![done](https://img.shields.io/badge/-Completed-brightgreen) |
-| **Architecture & Technology Stack** | 2 | ![done](https://img.shields.io/badge/-Completed-brightgreen) |
-| **Extract & Load** | 6 | ![done](https://img.shields.io/badge/-Completed-brightgreen) |
-
-</div>
-
----
-
-## 1️⃣ Business Context & Ownership
-
-![Show Image](https://via.placeholder.com/900x180?text=Business+Context+%26+Ownership+Diagram)
-
-<details open>
-<summary><strong>Expand section</strong></summary>
-
-| Question | Details / Technical Options | Status |
-|---|---|:---:|
-| Who owns the data? | Data owner, domain lead, and business stewards | ✅ |
-| What business process does it support? | Core operational, transactional, or analytics workflows | ✅ |
-| System & data documentation | Data dictionaries, ER diagrams, architecture specs | ✅ |
-| Data model & data catalog | Schema design, tables/views, data catalog registry | ✅ |
-
-</details>
-
----
-
-## 2️⃣ Architecture & Technology Stack
-
-![Show Image](https://via.placeholder.com/900x180?text=Architecture+%26+Tech+Stack+Diagram)
-
-<details open>
-<summary><strong>Expand section</strong></summary>
-
-| Question | Details / Technical Options | Status |
-|---|---|:---:|
-| How is data stored? | SQL Server, Oracle, AWS, Azure, PostgreSQL, etc. | ✅ |
-| What are the integration capabilities? | API, Kafka, file extract, direct DB connection, etc. | ✅ |
-
-</details>
+```text
+                    ┌─────────────────────┐
+                    │     Data Sources    │
+                    │                     │
+                    │ SQL Server          │
+                    │ APIs                 │
+                    │ CSV / Excel Files   │
+                    │ External Systems    │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │   Bronze Layer      │
+                    │   Raw Data          │
+                    │                     │
+                    │ • Source-aligned    │
+                    │ • Minimal changes   │
+                    │ • Historical copy   │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │   Silver Layer      │
+                    │   Cleaned Data      │
+                    │                     │
+                    │ • Validation        │
+                    │ • Standardization   │
+                    │ • Deduplication     │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │     Gold Layer      │
+                    │ Business Data       │
+                    │                     │
+                    │ • Fact Tables       │
+                    │ • Dimension Tables  │
+                    │ • KPIs / Metrics    │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │ Analytics & BI      │
+                    │                     │
+                    │ Power BI / SQL      │
+                    │ Reports / Dashboards│
+                    └─────────────────────┘
+```
 
 ---
 
-## 3️⃣ Extract & Load
+# 📋 Data Source Assessment & Onboarding
 
-![Show Image](https://via.placeholder.com/900x180?text=Extract+%26+Load+Flow+Diagram)
+Before a source is connected to the warehouse, it goes through a structured **Data Source Assessment & Onboarding Checklist**.
 
-<details open>
-<summary><strong>Expand section</strong></summary>
-
-| Question | Details / Technical Options | Status |
-|---|---|:---:|
-| Incremental vs. full loads? | Initial snapshot vs. change data capture (CDC) / delta loads | ✅ |
-| Data scope & historical needs | Historical depth, backfill requirements, active data range | ✅ |
-| Expected size of extracts | Batch payload size, record counts, expected MB/GB/TB | ✅ |
-| Data volume limitations | Bandwidth caps, query timeouts, source extraction limits | ✅ |
-| Avoiding source system performance impact | Read replicas, off-peak execution windows, rate throttling | ✅ |
-| Authentication and authorization | Tokens, SSH keys, VPN, IP whitelisting, IAM roles | ✅ |
-
-</details>
+The purpose is to understand the source's ownership, architecture, extraction capabilities, historical requirements, volume, and security constraints before pipeline development begins.
 
 ---
 
-<div align="center">
+## 📊 Assessment Status
 
-📌 *Run this checklist once per data source, prior to Bronze-layer ingestion, to confirm the source is well-understood and safe to extract from.*
+| Section                             |  Items |      Status     |
+| :---------------------------------- | -----: | :-------------: |
+| 🏢 Business Context & Ownership     |      4 |   ✅ Completed   |
+| 🏗️ Architecture & Technology Stack |      2 |   ✅ Completed   |
+| 🔄 Extract & Load                   |      6 |   ✅ Completed   |
+| **Total**                           | **12** | **✅ Completed** |
 
-</div>
+---
+
+## 1. 🏢 Business Context & Ownership
+
+This section establishes **why the data exists, who owns it, and how it supports the business**.
+
+| Assessment Area                 | Details / Technical Considerations                                       | Status |
+| :------------------------------ | :----------------------------------------------------------------------- | :----: |
+| **Data Ownership**              | Data owner, domain lead, business steward, responsible team              |    ✅   |
+| **Business Process**            | Operational, transactional, financial, customer, or analytical workflows |    ✅   |
+| **System & Data Documentation** | Data dictionaries, ER diagrams, architecture documentation               |    ✅   |
+| **Data Model & Catalog**        | Schemas, tables, views, relationships, metadata, data catalog            |    ✅   |
+
+### Key Questions
+
+* Who is responsible for the source data?
+* Which business process generates the data?
+* What systems consume or depend on the data?
+* Is documentation available?
+* What are the key entities and relationships?
+* Are business definitions and data ownership clearly established?
+
+---
+
+## 2. 🏗️ Architecture & Technology Stack
+
+This section determines **where the data resides and how it can be accessed**.
+
+| Assessment Area              | Details / Technical Considerations                               | Status |
+| :--------------------------- | :--------------------------------------------------------------- | :----: |
+| **Data Storage**             | SQL Server, Oracle, PostgreSQL, AWS, Azure, cloud storage, etc.  |    ✅   |
+| **Integration Capabilities** | API, Kafka, SFTP, file extract, direct database connection, etc. |    ✅   |
+
+### Key Questions
+
+* Where is the source data physically or logically stored?
+* What database or storage technology is being used?
+* What connectivity options are available?
+* Does the source provide APIs?
+* Is direct database access permitted?
+* Are file-based extracts supported?
+* Are there network or firewall restrictions?
+
+---
+
+## 3. 🔄 Extract & Load
+
+This section defines **how data will be extracted and loaded into the warehouse**.
+
+| Assessment Area                    | Details / Technical Considerations                                 | Status |
+| :--------------------------------- | :----------------------------------------------------------------- | :----: |
+| **Load Strategy**                  | Full load, incremental load, CDC, timestamp-based delta loads      |    ✅   |
+| **Data Scope & History**           | Historical depth, active records, backfill requirements            |    ✅   |
+| **Extract Size**                   | Record counts, batch size, MB / GB / TB expectations               |    ✅   |
+| **Volume Limitations**             | API limits, bandwidth, query timeouts, extraction restrictions     |    ✅   |
+| **Source Performance Impact**      | Read replicas, throttling, scheduling, off-peak extraction         |    ✅   |
+| **Authentication & Authorization** | IAM roles, service accounts, API tokens, VPN, SSH, IP whitelisting |    ✅   |
+
+### Key Questions
+
+* Should the initial load be a full snapshot?
+* How will subsequent changes be identified?
+* Does the source support Change Data Capture (CDC)?
+* How much historical data is required?
+* What is the expected daily/monthly data volume?
+* Are there API or query limitations?
+* When can extraction safely run?
+* What authentication mechanism is required?
+
+---
+
+# 🔐 Data Security Considerations
+
+Security requirements should be established before ingestion.
+
+Key considerations include:
+
+* 🔑 Authentication and authorization
+* 👤 Service accounts and role-based access
+* 🔒 Encryption in transit and at rest
+* 🌐 IP whitelisting and VPN requirements
+* 🛡️ Least-privilege database permissions
+* 🚫 Protection of sensitive or confidential fields
+* 📝 Audit logging and access monitoring
+* 🔄 Credential rotation
+
+---
+
+# 🔄 ETL Pipeline
+
+Once a source passes the onboarding assessment, it can be incorporated into the ETL pipeline.
+
+```text
+Source
+   │
+   ▼
+Extract
+   │
+   ▼
+Bronze
+   │
+   ▼
+Transform
+   │
+   ▼
+Silver
+   │
+   ▼
+Validate
+   │
+   ▼
+Gold
+   │
+   ▼
+Analytics
+```
+
+### Pipeline Principles
+
+* **Extract** data without unnecessarily impacting production systems.
+* **Validate** incoming records and schema structures.
+* **Transform** data into standardized formats.
+* **Deduplicate** records where required.
+* **Track** data quality and pipeline execution.
+* **Load** analytics-ready dimensional models.
+* **Monitor** failures and unexpected source changes.
+
+---
+
+# 🧩 Data Modeling
+
+The Gold layer is designed for analytical workloads using dimensional modeling principles.
+
+### Example Structure
+
+```text
+                 ┌──────────────────┐
+                 │   DimCustomer    │
+                 └────────┬─────────┘
+                          │
+                          │
+┌──────────────────┐      │      ┌──────────────────┐
+│   DimProduct     │──────┼──────│    DimDate       │
+└──────────────────┘      │      └──────────────────┘
+                          │
+                          ▼
+                 ┌──────────────────┐
+                 │    FactSales     │
+                 └──────────────────┘
+                          │
+                          │
+                 ┌──────────────────┐
+                 │   DimLocation    │
+                 └──────────────────┘
+```
+
+### Typical Warehouse Objects
+
+**Fact Tables**
+
+* `FactSales`
+* `FactOrders`
+* `FactTransactions`
+
+**Dimension Tables**
+
+* `DimCustomer`
+* `DimProduct`
+* `DimDate`
+* `DimLocation`
+* `DimEmployee`
+
+---
+
+# 🧹 Data Quality
+
+Data quality checks are incorporated throughout the pipeline.
+
+| Check                     | Purpose                               |
+| :------------------------ | :------------------------------------ |
+| **Null Validation**       | Identify missing required values      |
+| **Duplicate Detection**   | Prevent duplicate business records    |
+| **Referential Integrity** | Validate fact/dimension relationships |
+| **Data Type Validation**  | Ensure values match expected types    |
+| **Range Validation**      | Detect invalid numerical/date values  |
+| **Schema Validation**     | Identify unexpected source changes    |
+| **Record Count Checks**   | Compare source and target volumes     |
+| **Load Reconciliation**   | Confirm successful data movement      |
+
+---
+
+# 🛠️ Technology Stack
+
+| Technology               | Purpose                                     |
+| :----------------------- | :------------------------------------------ |
+| **Microsoft SQL Server** | Database & warehouse platform               |
+| **T-SQL**                | Data transformation & warehouse development |
+| **Python**               | Data processing, validation & automation    |
+| **Pandas**               | Data manipulation and quality analysis      |
+| **Power BI**             | Business intelligence & visualization       |
+| **Excel**                | Data inspection and validation              |
+| **Git / GitHub**         | Version control & project management        |
+
+---
+
+# 📁 Project Structure
+
+```text
+Data_warehouse_SQL/
+│
+├── datasets/
+│   ├── raw/
+│   └── processed/
+│
+├── docs/
+│   ├── data_source_assessment.md
+│   ├── architecture.md
+│   └── data_dictionary.md
+│
+├── scripts/
+│   ├── bronze/
+│   ├── silver/
+│   └── gold/
+│
+├── sql/
+│   ├── database/
+│   ├── staging/
+│   ├── transformations/
+│   └── analytics/
+│
+├── tests/
+│   └── data_quality/
+│
+├── dashboards/
+│   └── powerbi/
+│
+└── README.md
+```
+
+---
+
+# 🚀 Implementation Workflow
+
+The recommended development workflow is:
+
+```text
+01. Assess Data Source
+          ↓
+02. Document Business Requirements
+          ↓
+03. Analyze Source Architecture
+          ↓
+04. Define Extraction Strategy
+          ↓
+05. Build Bronze Layer
+          ↓
+06. Clean & Transform → Silver
+          ↓
+07. Apply Data Quality Checks
+          ↓
+08. Build Dimensional Model → Gold
+          ↓
+09. Create Analytical Views
+          ↓
+10. Connect Power BI / BI Tools
+          ↓
+11. Monitor & Maintain Pipeline
+```
+
+---
+
+# ✅ Data Source Onboarding Checklist
+
+### Business Context & Ownership
+
+* [x] Identify data owner
+* [x] Identify business process
+* [x] Review system documentation
+* [x] Review data model and catalog
+
+### Architecture & Technology
+
+* [x] Identify storage technology
+* [x] Identify integration/connectivity options
+
+### Extract & Load
+
+* [x] Define full vs incremental load
+* [x] Define historical requirements
+* [x] Estimate extraction size
+* [x] Identify volume limitations
+* [x] Define source-performance safeguards
+* [x] Define authentication and authorization
+
+---
+
+# 📈 Analytics & Reporting
+
+The final warehouse layer provides structured datasets that can support:
+
+* Sales analysis
+* Customer analytics
+* Product performance
+* Revenue reporting
+* Operational KPIs
+* Trend analysis
+* Management dashboards
+* Ad-hoc SQL analysis
+
+---
+
+# 🎯 Project Goals
+
+The project demonstrates practical understanding of:
+
+* Data warehouse architecture
+* ETL/ELT development
+* SQL Server
+* T-SQL
+* Data integration
+* Data modeling
+* Data quality
+* Incremental data loading
+* Source-system assessment
+* Business intelligence
+* Analytics engineering
+
+---
+
+## 📌 Data Source Assessment Principle
+
+> **A data source should be understood before it is engineered.**
+
+This checklist is designed to be completed **once per data source before development and Bronze-layer ingestion**, ensuring that ownership, architecture, extraction requirements, security, historical needs, and operational constraints are understood before the pipeline is built.
+
+---
+
+## 👨‍💻 Project Status
+
+**Status:** 🟢 Active Development
+
+**Primary Platform:** Microsoft SQL Server
+
+**Architecture:** Bronze → Silver → Gold
+
+**Focus:** Data Engineering & Analytics
